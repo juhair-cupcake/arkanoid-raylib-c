@@ -102,11 +102,11 @@ void update() {
   else if (screen == GAMEPLAY) {
     if(IsKeyPressed('p')) gamePaused = !gamePaused;
     if(!gamePaused){
-      if(IsKeyPressed(KEY_LEFT)) player.position.x -= player.speed.x;
-      if(IsKeyPressed(KEY_RIGHT)) player.position.x += player.speed.x;
+      if(IsKeyDown(KEY_LEFT)) player.position.x -= player.speed.x;
+      if(IsKeyDown(KEY_RIGHT)) player.position.x += player.speed.x;
 
       if(player.position.x <= 0) player.position.x = 0;
-      if(player.position.x >= screenWidth) player.position.x = screenWidth - player.size.x;
+      if(player.position.x + player.size.x >= screenWidth) player.position.x = screenWidth - player.size.x;
 
       player.bounds = (Rectangle){ player.position.x, player.position.y, player.size.x, player.size.y };
 
