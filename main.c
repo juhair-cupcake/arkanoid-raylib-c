@@ -116,6 +116,24 @@ void update() {
         if(((ball.position.x + ball.radius) >= screenWidth ) || ((ball.position.x - ball.radius) <= 0 )) ball.speed.x *= -1;
         if((ball.position.y + ball.radius) <= 0 ) ball.speed.y *= -1;
 
+        //ball VS player
+        if(CheckCollisionCircleRec(ball.position, ball.radius, player.bounds)){
+          ball.speed.y *= -1;
+          ball.speed.x = (ball.position.x - (player.position.x + player.size.x/2))/player.size.x*5.0f;
+        }
+        //ball VS bricks
+        for (int y=0; y<BRICKS_LINES; y++){
+          for(int x=0; x<BRICKS_PER_LINE; x++){
+            if(bricks[y][x].active && (CheckCollisionCircleRec(ball.position, ball.radius, bricks[y][x].bounds))){
+              bricks[y][x].active = false;
+              ball.speed.y *= -1;
+
+              break;
+            }
+          }
+        }
+        
+        //Game Lose
         if((ball.position.y + ball.radius) >= screenHeight){
           ball.position.x = player.position.x + player.size.x/2;
           ball.position.y = player.position.y - ball.radius - 1.0f;
