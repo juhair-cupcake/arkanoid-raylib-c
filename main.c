@@ -45,6 +45,7 @@ Ball ball = { 0 };
 Brick bricks[BRICKS_LINES][BRICKS_PER_LINE] = { 0 };
 GameScreen screen = LOGO;
 Texture2D texLogo, texBall, texPaddle, texBrick;
+Font font;
 
 void main() {
   InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "ARKANOID");
@@ -78,6 +79,7 @@ void initialize() {
   texBall = LoadTexture("./resources/ball.png");
   texPaddle = LoadTexture("./resources/paddle.png");
   texBrick = LoadTexture("./resources/brick.png");
+  font = LoadFoant("./resources/setback.png")
   
   player.position = (Vector2){ SCREEN_WIDTH/2, SCREEN_HEIGHT*7/8 };
   player.speed = (Vector2){ 8.0f, 0.0f };
