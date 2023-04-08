@@ -46,9 +46,12 @@ Brick bricks[BRICKS_LINES][BRICKS_PER_LINE] = { 0 };
 GameScreen screen = LOGO;
 Texture2D texLogo, texBall, texPaddle, texBrick;
 Font font;
+Sound fxStart, fxBounce, fxExplode;
+//Music music;
 
 void main() {
   InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "ARKANOID");
+  InitAudioDevice();
   SetTargetFPS(60);
   initialize();
   
@@ -59,6 +62,7 @@ void main() {
     
     //screen state & MATHS
     update();
+    //UpdateMusicStream(music);
     
     //Let's Draw
     BeginDrawing();
@@ -71,6 +75,13 @@ void main() {
   UnloadTexture(texPaddle);
   UnloadTexture(texBall);
   UnloadTexture(texBrick);
+  UnloadFont(font);
+  //UnloadMusicStream(music);
+  UnloadSound(fxStart);
+  UnloadSound(fxBounce);
+  UnloadSound(fxExplode);
+  
+  CloseAudioDevice();
   CloseWindow();
 }
 
@@ -80,6 +91,13 @@ void initialize() {
   texPaddle = LoadTexture("./resources/paddle.png");
   texBrick = LoadTexture("./resources/brick.png");
   font = LoadFont("./resources/setback.png");
+
+  fxStart = LoadSound("./resources/start.wav");
+  fxBounce = LoadSound("./resources/bounce.wav");
+  fxExplode = LoadSound("./resources/explosion.wav");
+  
+  //music = LoadMusicStream("./resources/blockshock.mod");
+  //PlayMusicStream(music);
   
   player.position = (Vector2){ SCREEN_WIDTH/2, SCREEN_HEIGHT*7/8 };
   player.speed = (Vector2){ 8.0f, 0.0f };
@@ -109,7 +127,10 @@ void update() {
     }
   }
   else if (screen == TITLE) {
-    if(IsKeyPressed(KEY_ENTER)) screen = GAMEPLAY;
+    if(IsKeyPressed(KEY_ENTER)){
+     screen = GAMEPLAY; 
+     PlaySound(fxStart);
+    }
   }
   else if (screen == GAMEPLAY) {
     if(IsKeyPressed('p')) gamePaused = !gamePaused;
@@ -132,6 +153,7 @@ void update() {
         if(CheckCollisionCircleRec(ball.position, ball.radius, player.bounds)){
           ball.speed.y *= -1;
           ball.speed.x = (ball.position.x - (player.position.x + player.size.x/2))/player.size.x*5.0f;
+          PlaySound(fxBounce);
         }
         //ball VS bricks
         for (int y=0; y<BRICKS_LINES; y++){
@@ -139,6 +161,7 @@ void update() {
             if(bricks[y][x].active && (CheckCollisionCircleRec(ball.position, ball.radius, bricks[y][x].bounds))){
               bricks[y][x].active = false;
               ball.speed.y *= -1;
+              PlaySound(fxExplode);
 
               break;
             }
