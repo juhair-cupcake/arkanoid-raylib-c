@@ -79,7 +79,7 @@ void initialize() {
   texBall = LoadTexture("./resources/ball.png");
   texPaddle = LoadTexture("./resources/paddle.png");
   texBrick = LoadTexture("./resources/brick.png");
-  font = LoadFoant("./resources/setback.png")
+  font = LoadFont("./resources/setback.png");
   
   player.position = (Vector2){ SCREEN_WIDTH/2, SCREEN_HEIGHT*7/8 };
   player.speed = (Vector2){ 8.0f, 0.0f };
@@ -184,7 +184,9 @@ void draw() {
     DrawTexture(texLogo, SCREEN_WIDTH/2 - texLogo.width/2, SCREEN_HEIGHT/2 - texLogo.height/2, WHITE);
   }
   else if (screen == TITLE) {
-    DrawText("PRESS TO PLAY", 20, 20, 40, DARKGREEN);
+    //DrawText("PRESS TO PLAY", 20, 20, 40, DARKGREEN);
+    DrawTextEx(font, "BLOCKS", (Vector2){100, 80}, 160, 10, MAROON);
+  
     if ((frameCounter/30)%2 == 0) {
       char *text = "Press [ENTER] to Start";
       int fontSize = 20;
@@ -221,7 +223,8 @@ void draw() {
     if(gamePaused) DrawText(pauseText, SCREEN_WIDTH/2 - MeasureText(pauseText, 40)/2, SCREEN_HEIGHT/2 + 60, 40, GRAY);
   }
   else if (screen == ENDING) {
-    DrawRectangle(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, BLUE);
+    DrawTextEx(font, "GAME OVER", (Vector2){80, 100}, 80, 6, MAROON);
+    
     char *endText = "Press [ENTER] to Play Again";
     if((frameCounter/30)%2 == 0) DrawText(endText, GetScreenWidth()/2 - MeasureText(endText, 20)/2, GetScreenHeight()/2 +80, 20, GRAY);
   }
